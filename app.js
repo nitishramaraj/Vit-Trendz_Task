@@ -1,20 +1,15 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const path = require('path');
-const mongoose = require('mongoose');
+const express = require('express')
+const mongoose = require('mongoose')
 
-const app = express();
+const app = express()
+
 const PORT = 5500;
+const MONGODB_URI = 'mongodb+srv://nitishramaraj:{PASSWORD}@vitrendz.wmmielx.mongodb.net/?retryWrites=true&w=majority'
 
-const productRoutes = require('./controllers/products/productRoute');
+app.use(express.json())
 
-app.use(bodyParser.json());
-
-const MONGODB_URI = 'mongodb+srv://nitishramaraj:Nitish123@counsailia.wmmielx.mongodb.net/?retryWrites=true&w=majority'
-
-app.use("/product", productRoutes);
-app.get("/", (req, res) => res.send("Welcome to the E-Commerce Product API!"));
-app.all("*", (req, res) => res.send("You've tried reaching a route that doesn't exist."));
+const productRouter = require('./routes/products')
+app.use('/products', productRouter)
 
 mongoose
     .connect(MONGODB_URI, {
@@ -28,3 +23,4 @@ mongoose
     .catch(err => {
         console.log(err);
     });
+
